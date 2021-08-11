@@ -1,5 +1,7 @@
 package com.zby.service;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
@@ -19,7 +21,7 @@ public class CodeGenerateService {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
         // 全局配置
-        GlobalConfig gc = getGlobalConfig(request.getAuthor(), outputDir);
+        GlobalConfig gc = getGlobalConfig(request);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         mpg.setGlobalConfig(gc);
 
@@ -36,13 +38,23 @@ public class CodeGenerateService {
 
     }
 
-    private static GlobalConfig getGlobalConfig(String author, String outputDir) {
+    private static GlobalConfig getGlobalConfig(CodeGenerateRequest request) {
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir(outputDir);
-        gc.setAuthor(author);
+        gc.setOutputDir(request.getOutputDir());
+        gc.setAuthor(request.getAuthor());
         gc.setFileOverride(true);
+        gc.setBaseResultMap(true);
+        gc.setBaseColumnList(false);
+        gc.setEnableCache(false);
+        gc.setOpen(false);
+        gc.setSwagger2(false);
+        gc.setIdType(IdType.valueOf(request.getIdType()));
+        // 自定义文件命名，注意 %s 会自动填充表实体属性！
+        gc.setControllerName("%sController");
         gc.setServiceName("%sService");
         gc.setServiceImplName("%sService");
+        gc.setMapperName("%sDao");
+        gc.setXmlName("%sMapper");
         gc.setOpen(false);
         return gc;
     }
@@ -65,12 +77,11 @@ public class CodeGenerateService {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+        strategy.setTablePrefix(tablePrefix);
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         strategy.setSuperServiceImplClass("com.baomidou.mybatisplus.extension.service.impl.ServiceImpl");
         strategy.setInclude(tableNames);
-        strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(tablePrefix);
         return strategy;
     }
 
@@ -80,6 +91,7 @@ public class CodeGenerateService {
         dsc.setDriverName(driverName);
         dsc.setUsername(userName);
         dsc.setPassword(password);
+        dsc.setDbType(DbType.MYSQL);
         return dsc;
     }
 

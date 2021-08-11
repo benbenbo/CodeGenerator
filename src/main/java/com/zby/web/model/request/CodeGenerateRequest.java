@@ -63,4 +63,13 @@ public class CodeGenerateRequest {
     @NotBlank(message = "表名不能为空")
     @ApiModelProperty(value = "表名，可用逗号分隔", example = "m_user", required = true)
     private String tableNames;
+
+    @ApiModelProperty(value = "输出路径", hidden = true)
+    private String outputDir;
+
+    /**
+     * 生成ID类型
+     */
+    @ApiModelProperty(value = "生成ID类型(AUTO:数据库ID自增,NONE:该类型为未设置主键类型(将跟随全局), INPUT:用户输入ID, ID_WORKER: 雪花id，UUID：UUID， ID_WORKER_STR：idWorker 的字符串表示", example = "AUTO")
+    private String idType = "AUTO";
 }

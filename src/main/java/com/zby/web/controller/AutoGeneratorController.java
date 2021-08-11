@@ -37,12 +37,13 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class AutoGeneratorController {
     private final CodeGenerateService codeGenerateService;
-    
+
     @ApiOperation(value = "生成代码并下载", notes = "郑炳元")
     @PostMapping(value = "/codeGenerate", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public HttpEntity codeGenerate(@RequestBody @Validated CodeGenerateRequest request) throws IOException {
         String projectPath = System.getProperty("user.dir");
         String outputDir = projectPath + File.separator + "temp" + File.separator + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.CHINA));
+        request.setOutputDir(outputDir);
         codeGenerateService.execute(request, outputDir);
         String srcPath = outputDir + File.separator + request.getParentPackage().substring(0, request.getParentPackage().indexOf("."));
         String fileName = "code.zip";
