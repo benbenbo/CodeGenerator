@@ -45,6 +45,7 @@ public class AutoGeneratorController {
         String outputDir = projectPath + File.separator + "temp" + File.separator + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.CHINA));
         request.setOutputDir(outputDir);
         codeGenerateService.execute(request, outputDir);
+//        String packageName = request.getParentPackage() + "." + request.getModuleName();
         String srcPath = outputDir + File.separator + request.getParentPackage().substring(0, request.getParentPackage().indexOf("."));
         String fileName = "code.zip";
         String zipPath = outputDir + File.separator + fileName;
